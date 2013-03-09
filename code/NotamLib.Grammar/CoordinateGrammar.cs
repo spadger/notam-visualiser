@@ -3,7 +3,7 @@ using Irony.Parsing;
 
 namespace NotamLib.Parsing
 {
-    [Language("Simple non-real cooredinates", "0.1", "A grammar to parse an imaginary coordinate system")]
+    [Language("Simple non-real coordinates", "0.1", "A grammar to parse an imaginary coordinate system")]
     public class CoordinateGrammar : Grammar
     {
         //70 50' 44" N 1 13' 66" E
@@ -11,7 +11,6 @@ namespace NotamLib.Parsing
         {
             #region Terminals
             var integer = new NumberLiteral("integer", NumberOptions.IntOnly);
-            var space = ToTerm(" ", "space");
             var point = ToTerm(".", "dot");
             var lat = ToTerm("N", "north") | ToTerm("S", "south");
             var lon = ToTerm("E", "east") | ToTerm("W", "west");
@@ -36,10 +35,10 @@ namespace NotamLib.Parsing
 
             minute.Rule = integer + minuteMarker;
             second.Rule = integer + secondMarker;
-            imperialMagnitude.Rule = integer + space + minute + space + second;
-            imperialLatitude.Rule = imperialMagnitude + space + lat;
-            imperialLongitude.Rule = imperialMagnitude + space + lon;
-            imperialCoordinate.Rule = imperialLatitude + space + imperialLongitude;
+            imperialMagnitude.Rule = integer + minute + second;
+            imperialLatitude.Rule = imperialMagnitude + lat;
+            imperialLongitude.Rule = imperialMagnitude + lon;
+            imperialCoordinate.Rule = imperialLatitude + imperialLongitude;
             #endregion
 
             Root = imperialCoordinate;
